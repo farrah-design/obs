@@ -1,0 +1,313 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 30px;
+  color: #333;
+}
+
+.container {
+  max-width: 960px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* Sidebar */
+.sidebar {
+width: 250px;
+height: 100vh;
+background-color: #fff;
+position: fixed;
+top: 0;
+left: 0;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding: 20px;
+box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+box-sizing: border-box;
+}
+
+.sidebar-top {
+display: flex;
+flex-direction: column;
+}
+
+.logo {
+font-weight: bold;
+font-size: 18px;
+margin-bottom: 40px;
+color: #222;
+text-align: center;
+}
+
+.menu {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.menu-item {
+display: flex;
+align-items: center;
+padding: 10px 15px;
+border-radius: 8px;
+cursor: pointer;
+font-size: 14px;
+transition: background 0.2s;
+}
+
+.menu-item:hover {
+background-color: #f1f1f1;
+}
+
+.menu-item i {
+margin-right: 12px;
+font-size: 18px;
+color: #555;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #343a40;
+}
+/* Logout button at bottom */
+.sidebar-bottom {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  border: 1px solid #343a40;
+  background-color: transparent;
+  text-decoration: none;
+  color: #343a40;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #343a40;
+  color: #fff;
+}
+
+/* Profile */
+.user-info {
+  display: flex;
+  margin-left: 10px;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: #343a40;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Notification Tabs */
+.notification-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.tab.active {
+  background-color: #b21f66;
+  color: white;
+}
+
+.tab:hover:not(.active) {
+  background-color: #ddd;
+}
+
+/* Tables */
+.appointment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.appointment-table th,
+.appointment-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.appointment-table th {
+  background-color: #fafafa;
+  font-weight: 600;
+}
+
+/* Badges */
+.badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.badge.upcoming {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.badge.completed {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge.cancelled {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Buttons */
+.btn-remind {
+  background: #b21f66;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-remind:hover {
+  background: #a11c5d;
+}
+
+.btn-action {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #a3297a;
+  color: white;
+  transition: background 0.2s;
+}
+
+.btn-action:hover {
+  background-color: #cc3399;
+}
+
+.btn-offer {
+  background-color: #a3297a;
+  color: white;
+}
+
+.btn-feedback {
+  background-color: #832c66;
+  color: white;
+}
+
+/* Forms */
+.notification-form {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+select[multiple] {
+  height: auto;
+  min-height: 100px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.send-btn {
+  background-color: #b21f66;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.send-btn:hover {
+  background-color: #a11c5d;
+}
+
+.auto-generate {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 5px;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}

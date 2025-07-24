@@ -1,0 +1,272 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 30px;
+  color: #333;
+}
+
+.container {
+  max-width: 960px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* Sidebar */
+.sidebar {
+width: 250px;
+height: 100vh;
+background-color: #fff;
+position: fixed;
+top: 0;
+left: 0;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding: 20px;
+box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+box-sizing: border-box;
+}
+
+.sidebar-top {
+display: flex;
+flex-direction: column;
+}
+
+.logo {
+font-weight: bold;
+font-size: 18px;
+margin-bottom: 40px;
+color: #222;
+text-align: center;
+}
+
+.menu {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.menu-item {
+display: flex;
+align-items: center;
+padding: 10px 15px;
+border-radius: 8px;
+cursor: pointer;
+font-size: 14px;
+transition: background 0.2s;
+}
+
+.menu-item:hover {
+background-color: #f1f1f1;
+}
+
+.menu-item i {
+margin-right: 12px;
+font-size: 18px;
+color: #555;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #343a40;
+}
+
+/* Logout button at bottom */
+.sidebar-bottom {
+display: flex;
+justify-content: flex-start;
+}
+
+.logout-btn {
+padding: 8px 16px;
+border: 1px solid #343a40;
+background-color: transparent;
+text-decoration: none;
+color: #343a40;
+border-radius: 6px;
+font-weight: 600;
+cursor: pointer;
+transition: background-color 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+background-color: #343a40;
+color: #fff;
+}
+
+/*profile*/
+.user-info {
+display: flex;
+margin-left: 10px;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+}
+
+.user-avatar {
+width: 40px;
+height: 40px;
+background: #343a40;
+color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 50%;
+font-weight: bold;
+}
+
+.user-role {
+font-size: 12px;
+color: #777;
+}
+
+.promo-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.btn-add {
+  background: #b21f66;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-add:hover {
+  background: #a11c5d;
+}
+
+.promo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.promo-table th,
+.promo-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.promo-table th {
+  background-color: #fafafa;
+}
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.badge.active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge.expired {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #b95e8a;
+  color: white;
+  margin-right: 5px;
+}
+
+.btn-edit:hover{
+  background-color: #ff9fcc;
+  color: #b21f66;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-overlay {
+position: fixed;
+top: 0; left: 0;
+width: 100vw; height: 100vh;
+background: rgba(0, 0, 0, 0.5);
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+}
+
+.modal-overlay.show {
+display: flex;
+}
+
+.modal-content {
+background: white;
+padding: 25px;
+border-radius: 10px;
+width: 100%;
+max-width: 500px;
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+margin-top: 0;
+}
+
+.modal-content label {
+display: block;
+margin-top: 12px;
+font-weight: 600;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+width: 100%;
+padding: 8px;
+margin-top: 4px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.modal-actions {
+margin-top: 20px;
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+}
+
+.modal-actions button {
+padding: 8px 14px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+}
+
+.modal-actions button:last-child {
+background-color: #5cb85c;
+color: white;
+}
