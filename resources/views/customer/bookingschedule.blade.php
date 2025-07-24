@@ -148,7 +148,7 @@
   <div class="modal-content">
     <h2 class="modal-title">Cancel Booking</h2>
     <p>Please tell us why you're cancelling:</p>
-    <form id="cancelForm" action="{{ route('feedback.submit') }}" method="POST">
+    <form id="cancelForm" action="{{ route('admin.closeStatus') }}" method="POST">
       @csrf
       <input type="hidden" id="cancelAppointmentId" name="appointment_id">
       <textarea id="cancelReason" name="cancellation_reason" required placeholder="Enter your reason..." style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; height: 100px; margin: 10px 0;"></textarea>
@@ -226,14 +226,6 @@ document.getElementById('rescheduleForm').addEventListener('submit', function(e)
   // You might want to reload the page or update the table
 });
 
-document.getElementById('cancelForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  // Add AJAX call here to submit the cancellation
-  alert('Appointment cancelled successfully!');
-  closeCancelModal();
-  // You might want to reload the page or update the table
-});
 </script>
 @endsection
 

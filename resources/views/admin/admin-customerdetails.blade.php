@@ -10,74 +10,36 @@
 <div class="main-content">
   <div class="header">
     <h2>Customer List</h2>
-    <input type="text" placeholder="Search..">
+    <input type="text" placeholder="Search by customer name..">
   </div>
 
   <div class="section">
-  <!-- Container for multiple customer cards -->
-  <div class="cards-container">
-    <!-- Customer Card 1 -->
-    <div class="customer-card">
-      <div class="customer-header">
-        <div class="avatar">JD</div>
-        <div class="customer-info">
-          <div class="name">John Doe</div>
-          <div class="email">john.doe@example.com</div>
+    <div class="cards-container">
+      @foreach ($customers as $customer)
+        <div class="customer-card">
+          <div class="customer-header">
+            <div class="avatar">{{ strtoupper(substr($customer->name, 0, 1)) }}</div>
+            <div class="customer-info">
+              <div class="name">{{ $customer->name }}</div>
+              <div class="email">{{ $customer->email }}</div>
+            </div>
+          </div>
+          
+          <a href="{{ route('admin.appointment', ['customerID' => $customer->customerID]) }}" class="view-appointments">View Appointments</a>
+          
+          <div class="contact-info">
+            <div class="contact">
+              <span>📞</span>
+              <span>{{ $customer->phone ?? '-' }}</span>
+            </div>
+            <div class="contact">
+              <span>👤</span>
+              <span><div class="avatar">{{ strtoupper(substr($customer->name, 0, 1)) }}</div>
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-      <a href="{{ route('manager.appointment')}}" class="view-appointments">View Appointments</a>
-      <div class="contact-info">
-        <div class="contact">
-          <span>📞</span>
-          <span>555-666-7777</span>
-        </div>
-        <div class="contact">
-          <span>👤</span>
-          <span>john.doe</span>
-        </div>
-      </div>
-    </div>
-    <!-- Customer Card 2 -->
-    <div class="customer-card">
-      <div class="customer-header">
-        <div class="avatar">S</div>
-        <div class="customer-info">
-          <div class="name">Sakinah</div>
-          <div class="email">Sakinah.h@example.com</div>
-        </div>
-      </div>
-      <a href="{{ route('manager.appointment')}}" class="view-appointments">View Appointments</a>
-      <div class="contact-info">
-        <div class="contact">
-          <span>📞</span>
-          <span>012-345-6789</span>
-        </div>
-        <div class="contact">
-          <span>👤</span>
-          <span>sa.kinah</span>
-        </div>
-      </div>
-    </div>
-    <!-- Customer Card 3 -->
-    <div class="customer-card">
-      <div class="customer-header">
-        <div class="avatar">N</div>
-        <div class="customer-info">
-          <div class="name">Nordin</div>
-          <div class="email">Nordin.m@example.com</div>
-        </div>
-      </div>
-      <a href="{{ route('manager.appointment')}}" class="view-appointments">View Appointments</a>
-      <div class="contact-info">
-        <div class="contact">
-          <span>📞</span>
-          <span>012-345-6789</span>
-        </div>
-        <div class="contact">
-          <span>👤</span>
-          <span>nordin</span>
-        </div>
-      </div>
+      @endforeach
     </div>
   </div>
 </div>
@@ -85,7 +47,17 @@
 
 @section('scripts')
 <script>
-
+  document.getElementById('appointmentSearch').addEventListener('input', function() {
+  const search = this.value.toLowerCase();
+  const rows = document.querySelectorAll('.appointments-table tbody tr');
+  rows.forEach(row => {
+    // Customer name is in the 4th column (index 3)
+    const customerCell = row.cells[3];
+    if (!customerCell) return; // skip if row is malformed
+    const customerName = customerCell.textContent.toLowerCase();
+    row.style.display = customerName.includes(search) ? '' : 'none';
+  });
+});
 </script>
 @endsection
 

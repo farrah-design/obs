@@ -107,6 +107,15 @@ class AppointmentController extends Controller
 
     public function cancelStatus(Request $request){
 
+       $validated = $request->validate([
+            'appointment_id' => 'required|exists:appointments,appointmentID',
+            'cancellation_reason' => 'required_if:status,cancelled|nullable|string|max:500' // Conditional validation
+        ]);
+
+        // Find and update appointment
+         Appointment::where('appointmentID', $validated['appointment_id'])
+              ->update(['status' => 'cancelled','appointment_note' => $validated['cancellation_reason']]);
+
         return back()->with('');
     }
 

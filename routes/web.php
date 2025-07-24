@@ -35,9 +35,6 @@ Route::get('/admin/notification', function () {
     return view('admin.notification');
 })->name('admin.notification');
 
-Route::get('/admin/manage-service', function () {
-    return view('admin.manage-service');
-})->name('admin.manage-service');
 
 Route::get('/admin/admin-dashboard', function () {
     return view('admin.admin-dashboard');
@@ -97,9 +94,6 @@ Route::get('/customer/bookingschedule', function () {
     return view('customer.bookingschedule');
 })->name('customer.bookingschedule');
 
-Route::get('/customer/servicelist', function () {
-    return view('customer.servicelist');
-})->name('service.list');
 
 Route::get('/customer/promotions', function () {
     return view('customer.promotions');
@@ -110,14 +104,6 @@ Route::get('/main', function () {
     return view('main');
 })->name('main');
 
-// Add the following import at the top of your file if not already present:
-// use App\Http\Controllers\StaffController;
-
-Route::get('/create-default-staff', [\App\Http\Controllers\StaffController::class, 'createDefaultStaff']);
-
-Route::resource('services', ServiceController::class);
-Route::resource('promotions', PromotionController::class);
-Route::resource('appointments', AppointmentController::class);
 
 Route::middleware(['auth:customer'])->group(function () {
     Route::get('/customer/profile', [\App\Http\Controllers\CustomerProfileController::class, 'view'])->name('customer.profile');
@@ -136,14 +122,23 @@ Route::get('/admin/admin-appointment', [\App\Http\Controllers\AppointmentControl
 Route::post('/admin/admin-appointment', [\App\Http\Controllers\AppointmentController::class, 'updateStatus'])->name('admin.updateStatus');
 Route::get('/admin/admin-past', [\App\Http\Controllers\AppointmentController::class, 'viewPastAppointments'])->name('admin.pastappointment');
 Route::get('/admin/admin-all', [\App\Http\Controllers\AppointmentController::class, 'viewAllAppointments'])->name('admin.allappointment');
+Route::post('/admin/feedback/close', [\App\Http\Controllers\AppointmentController::class, 'cancelStatus'])->name('admin.closeStatus');
 
 //feedback routes
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.submit');
 Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'show'])->name('admin.feedback');
 Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'customerFeedback'])->name('admin.feedback');
 Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'recent'])->name('admin.feedback');
-Route::post('/admin/feedback/close', [\App\Http\Controllers\FeedbackController::class, 'recent'])->name('admin.feedback');
+
 
 //customer details routes
-Route::get('/admin/admin-customerdetails', [\App\Http\Controllers\CustomerProfileController::class, 'adminListCustomers'])->name('admin.customerdetails');
-Route::get('/admin/admin-customerdetails/{id}', [\App\Http\Controllers\CustomerProfileController::class, 'adminViewCustomer'])->name('admin.list');
+Route::get('/admin/admin-customerdetails', [\App\Http\Controllers\CustomerProfileController::class, 'adminViewCustomer'])->name('admin.customerdetails');
+
+//service routes
+Route::get('/admin/manage-service', [\App\Http\Controllers\ServiceController::class, 'view'])->name('admin.manage-service');
+
+Route::post('/admin/create-service', [\App\Http\Controllers\ServiceController::class, 'create'])->name('admin.create-service');
+
+Route::post('/admin/update-service', [\App\Http\Controllers\ServiceController::class, 'update'])->name('admin.update-service');
+
+Route::post('/admin/delete-service', [\App\Http\Controllers\ServiceController::class, 'delete'])->name('admin.delete-service');

@@ -71,37 +71,17 @@ class CustomerProfileController extends Controller
     return redirect()->back()->with('success', 'Profile updated successfully.');
 }
 
-    /**
-     * Admin function to view customer details
-     */
-    public function adminViewCustomer($id)
-    {
-        /** @var \App\Models\Staff $staff */
-        $staff = Auth::guard('staff')->user();
+    public function adminViewCustomer()
+{
+    // Optional: Check if authenticated admin
+    $staff = Auth::guard('staff')->user();
 
-        $customer = Customer::with(['appointments', 'feedback'])
-            ->findOrFail($id);
+    // Select only essential fields for performance
+    $customers = Customer::select('customerID', 'name', 'phone', 'email')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10); // Adjust pagination as needed
 
-        return view('admin.list', [
-            'customer' => $customer,
-            'appointments' => $customer->appointments()->latest()->take(5)->get(),
-            'feedback' => $customer->feedback()->with('appointment')->latest()->take(5)->get()
-        ]);
-    }
-
-    /**
-     * Admin function to list all customers
-     */
-    public function adminListCustomers()
-    {
-        /** @var \App\Models\Staff $staff */
-        $staff = Auth::guard('staff')->user();
-
-        $customers = Customer::withCount(['appointments', 'feedback'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('admin.customerdetails', compact('customers'));
-    }
+    return view('admin.admin-customerdetails', compact('customers'));
+}
 
 }
