@@ -16,96 +16,114 @@
   <div class="schedule-section">
     <div class="schedule-header">
       <div class="schedule-title">Today’s Schedule</div>
-      <button onclick="showModal()" class="btn" id="addAvailabilityBtn">+ Add Availability</button>
+        <button onclick="showModal()" class="btn" id="addAvailabilityBtn">+ Add Availability</button>
     </div>
-    <div class="schedule-content"></div>
+    
     <!-- Schedule table -->
     <table class="appointments-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Staff</th>
-      <th>Customer</th>
-      <th>Service</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>2025-05-23</td>
-      <td>10:00</td>
-      <td>Habib</td>
-      <td>Sakinah</td>
-      <td>Haircut</td>
-      <td>
-          <select class="status-select" onchange="updateStatus(this)">
-              <option value="Available" selected>Available</option>
-              <option value="offday">Off-day</option>
-            </select>
-      </td>
-    </tr>
-    <tr>
-      <td>2025-05-25</td>
-      <td>14:00</td>
-      <td>Ida</td>
-      <td>Nordin</td>
-      <td>Hair coloring</td>
-      <td>
-          <select class="status-select" onchange="updateStatus(this)">
-              <option value="Available">Available</option>
-              <option value="offday"  selected>Off-day</option>
-          </select>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-<!-- Modal Overlay -->
-<div id="modalOverlay">
-  <div class="popup">
-    <h2>Add Availability</h2>
-    <p>Set your availability for a specific day of the week.</p>
-    <form id="availabilityForm">
-      <div class="form-group">
-        <label for="day">Day</label>
-        <select id="day" name="day" required>
-          <option value="Monday">Monday</option>
-          <option value="Tuesday">Tuesday</option>
-          <option value="Wednesday">Wednesday</option>
-          <option value="Thursday">Thursday</option>
-          <option value="Friday">Friday</option>
-          <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="status">Status</label>
-        <select id="status" name="status" required>
-          <option value="Available">Available</option>
-          <option value="Unavailable">Unavailable</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="startTime">Start Time</label>
-        <input type="time" id="startTime" name="startTime" required />
-      </div>
-      <div class="form-group">
-        <label for="endTime">End Time</label>
-        <input type="time" id="endTime" name="endTime" required />
-      </div>
-      <div class="btn-group">
-        <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-        <button type="submit" class="save-btn">Save Availability</button>
-      </div>
-    </form>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Staff</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($schedules as $schedule)
+        <tr>
+          <td>{{ $schedule->date }}</td>
+          <td>{{ $schedule->start_time }}</td>
+          <td>{{ $schedule->staff->name }}</td>
+          <td>
+            <form action="{{ route('admin.update-schedule', $schedule->id) }}" method="POST" class="status-form">
+              @csrf
+              @method('PATCH')
+              <select name="status" class="status-select" onchange="this.form.submit()">
+                <option value="Available" {{ $schedule->status == 'Available' ? 'selected' : '' }}>Available</option>
+                <option value="Available" {{ $schedule->status == 'Unavailable' ? 'selected' : '' }}>Unavailable</option>
+                <option value="offday" {{ $schedule->status == 'offday' ? 'selected' : '' }}>Off-day</option>
+              </select>
+            </form>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
   </div>
-</div>
+
+  <!-- Modal Overlay -->
+  <div id="modalOverlay">
+    <div class="popup">
+      <h2>Add Availability</h2>
+      <p>Set your availability for a specific day of the week.</p>
+      <form id="availabilityForm" method="POST" action="{{ route('admin.create-schedule') }}">
+        @csrf
+        <div class="form-group">
+          <label for="staff_id">Staff</label>
+          <select id="staff_id" name="staff_id" class="form-control" required>
+            @foreach($staffMembers as $staff)
+              <option value="{{ $staff->staffID }}">{{ $staff->name }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input name="date" type="date" id="date" min="{{ now()->format('Y-m-d') }}" class="form-control" onchange="loadAvailableTimes()">
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status" class="form-control" required>
+            <option value="Available">Available</option>
+            <option value="Unavailable">Unavailable</option>
+            <option value="offday">Off-day</option>
+          </select> 
+        </div>
+        <div class="form-group">
+          <label for="start_time">Start Time</label>
+          <input type="time" id="start_time" name="start_time" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="end_time">End Time</label>
+          <input type="time" id="end_time" name="end_time" class="form-control" required>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="save-btn">Save Availability</button>
+        </div>
+      </form>
+    </div>
+  </div>
 @endsection
 
 @section('scripts')
 <script>
+  function loadAvailableTimes() {
+      const date = document.getElementById('date').value;
+      if (!date) return;
+  }
+
+  function loadAvailableTimes() {
+  const dateInput = document.getElementById('date');
+  const selectedDate = dateInput.value;
+  
+  if (!selectedDate) return;
+  
+  // Get current date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Validate date is not in the past
+  if (selectedDate < today) {
+    alert('Please select today or a future date');
+    dateInput.value = today; // Reset to today
+    return;
+  }
+  
+  // Continue with your time loading logic
+  console.log('Loading available times for:', selectedDate);
+  // Add your AJAX call or time slot generation here
+}
+
   // Show modal popup
   function showModal() {
     document.getElementById('modalOverlay').classList.add('show');
@@ -119,8 +137,7 @@
   // Handle form submit
   document.getElementById('availabilityForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('Availability saved!');
-    closeModal();
+    this.submit(); // Now submits properly to Laravel route
   });
 
   // Close modal when clicking outside
@@ -131,25 +148,31 @@
   });
 
   // Filter logic
-const rows = document.querySelectorAll("table tbody tr");
+  document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll("table tbody tr");
+    const filterDate = document.getElementById("filterDate");
+    const filterStaff = document.getElementById("filterStaff");
+    
+    if (filterDate && filterStaff) {
+      filterDate.addEventListener("input", filterTable);
+      filterStaff.addEventListener("change", filterTable);
+    }
 
-document.getElementById("filterDate").addEventListener("input", filterTable);
-document.getElementById("filterStaff").addEventListener("change", filterTable);
+    function filterTable() {
+      const date = filterDate.value;
+      const staff = filterStaff.value.toLowerCase();
 
-function filterTable() {
-  const date = document.getElementById("filterDate").value;
-  const staff = document.getElementById("filterStaff").value.toLowerCase();
+      rows.forEach(row => {
+        const rowDate = row.children[0].textContent.trim();
+        const rowStaff = row.children[2].textContent.trim().toLowerCase();
 
-  rows.forEach(row => {
-    const rowDate = row.children[0].textContent.trim();
-    const rowStaff = row.children[2].textContent.trim().toLowerCase();
+        const matchDate = !date || rowDate === date;
+        const matchStaff = !staff || rowStaff === staff;
 
-    const matchDate = !date || rowDate === date;
-    const matchStaff = !staff || rowStaff === staff;
-
-    row.style.display = matchDate && matchStaff ? "" : "none";
+        row.style.display = matchDate && matchStaff ? "" : "none";
+      });
+    }
   });
-}
 </script>
 @endsection
 

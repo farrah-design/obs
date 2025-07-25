@@ -10,7 +10,7 @@
 <div class="hero">
     <h1>Book Your Styling Journey</h1>
     <p>Experience salon services with our easy online booking system.</p>
-    <a href="{{ route('booking.form') }}" class="button">
+    <a href="{{ route('customer.bookingpage') }}" class="button">
         Book Appointment 
         <span class="calendar-icon">🗓️</span>
     </a>
@@ -22,31 +22,31 @@
             <div class="service-icon"><i class=""></i></div>
             <h2>Haircuts & Styling</h2>
             <p>Haircuts and Styling for all hair types</p>
-            <a href="{{ route('booking.form') }}">Book Now →</a>
+            <a href="{{ route('customer.bookingpage') }}">Book Now →</a>
         </div>
         <div class="service-card">
             <div class="service-icon"><i class=""></i></div>
             <h2>Hair Coloring</h2>
             <p>Enhance or transform your look with expert hair coloring services</p>
-            <a href="{{ route('booking.form') }}">Book Now →</a>
+            <a href="{{ route('customer.bookingpage') }}">Book Now →</a>
         </div>
         <div class="service-card">
             <div class="service-icon"><i class=""></i></div>
             <h2>Hair Extensions</h2>
             <p>Add volume and length with high-quality hair extensions</p>
-            <a href="{{ route('booking.form') }}">Book Now →</a>
+            <a href="{{ route('customer.bookingpage') }}">Book Now →</a>
         </div>
         <div class="service-card">
             <div class="service-icon"><i class=""></i></div>
             <h2>Perms & Texture Services</h2>
             <p>Achieve curls, waves, or sleek straight hair with professional treatments</p>
-            <a href="{{ route('booking.form') }}">Book Now →</a>
+            <a href="{{ route('customer.bookingpage') }}">Book Now →</a>
         </div>
         <div class="service-card">
             <div class="service-icon"><i class=""></i></div>
             <h2>Add-On Services</h2>
             <p>Extra care options like blow-dry, hair wash, and shine treatments</p>
-            <a href="{{ route('booking.form') }}">Book Now →</a>
+            <a href="{{ route('customer.bookingpage') }}">Book Now →</a>
         </div>
     </div>
 
@@ -99,7 +99,7 @@
                 <h3>Quick Links</h3>
                 <a href="{{ route('service.list') }}">Our Services</a>
                 <a href="{{ route('customer.promotions') }}">Promotions</a>
-                <a href="{{ route('booking.form') }}">Book Appointment</a>
+                <a href="{{ route('customer.bookingpage') }}">Book Appointment</a>
             </div>
             
             <div class="footer-column">

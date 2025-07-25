@@ -29,7 +29,7 @@
                   data-duration="{{ $service->duration }}"
                   onclick="populateEditModal(this)">Edit</button>
 
-          <form method="POST" action="{{ route('admin.delete-service') }}" onsubmit="return confirm('Delete this service?')">
+          <form method="POST" action="{{ route('admin.delete-promo') }}" onsubmit="return confirm('Delete this service?')">
             @csrf
             <input type="hidden" name="serviceID" value="{{$service->serviceID}}">
             <button type="submit">Delete</button>
@@ -44,7 +44,7 @@
 <div class="modal-overlay" id="addModal">
   <div class="modal-content">
     <h2>Add New Service</h2>
-    <form id="addServiceForm" method="POST" action="{{ route('admin.create-service') }}">
+    <form id="addServiceForm" method="POST" action="{{ route('admin.create-promo') }}">
       @csrf
       <label>Service Name</label>
       <input type="text" name="serviceName" required>
@@ -70,7 +70,7 @@
 <div class="modal-overlay" id="editModal">
   <div class="modal-content">
     <h2>Edit Service</h2>
-    <form id="editServiceForm" method="POST" action="{{ route('admin.update-service') }}">
+    <form id="editServiceForm" method="POST" action="{{ route('admin.update-promo') }}">
       @csrf
       <input type="hidden" name="serviceID" id="editServiceID">
 

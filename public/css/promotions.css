@@ -1,4 +1,5 @@
-body {
+
+    body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -95,18 +96,15 @@ body {
     }
 
     .promo-badge {
-      background: #b21f66;
+      background: #725e1c;
       color: white;
       padding: 4px 10px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 18px;
+      margin: 0 0 10px;
       display: inline-block;
       margin-bottom: 10px;
     }
-
-    .social-badge { background: #3b5998; } /* Facebook blue */
-    .insta-badge { background: #e4405f; } /* Instagram pink */
-    .tiktok-badge { background: #000000; } /* TikTok black */
 
     .promo-title {
       font-size: 18px;

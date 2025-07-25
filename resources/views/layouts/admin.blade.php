@@ -21,13 +21,13 @@
     <div class="menu">
       <a href="{{ route('admin.dashboard') }}" class="menu-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
       <a href="{{ route('admin.manage-service') }}" class="menu-item"><i class="fas fa-book-open"></i> Manage Services</a>
-      <a href="{{ route('admin.schedule') }}" class="menu-item"><i class="fas fa-concierge-bell"></i> Schedule</a>
+      <a href="{{ route('admin.manage-schedule') }}" class="menu-item"><i class="fas fa-concierge-bell"></i> Schedule</a>
       <a href="{{ route('admin.appointment') }}" class="menu-item"><i class="fas fa-book-open"></i> Appointment</a>
       <a href="{{ route('admin.customerdetails') }}" class="menu-item"><i class="fas fa-user-friends"></i> Customer List</a>
-      <a href="{{ route('admin.staffpage') }}" class="menu-item"><i class="fas fa-user-friends"></i> Staff Area</a>
       <a href="{{ route('admin.notification') }}" class="menu-item"><i class="fas fa-tachometer-alt"></i> Manage Notifications</a>
       <a href="{{ route('admin.feedback') }}" class="menu-item"><i class="fas fa-tachometer-alt"></i> Feedback</a>
       <a href="{{ route('admin.manage-promo') }}" class="menu-item"><i class="fas fa-book-open"></i> Manage Promotions & Discounts</a>
+      <a href="{{ route('admin.profile') }}" class="menu-item"><i class="fas fa-user-friends"></i>Manage Profile</a>
     </div>
   </div>
   <div class="sidebar-bottom">

@@ -21,6 +21,11 @@ class Staff extends Authenticatable
         'password',
     ];
 
+    public function promotions()
+    {
+    return $this->hasMany(Promotion::class, 'staffID', 'staffID');
+    }
+
     protected static function boot()
     {
         parent::boot();

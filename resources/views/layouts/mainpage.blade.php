@@ -20,7 +20,7 @@
         <ul class="nav-links">
             <li><a href="{{ route('service.list') }}">Services</a></li>
             <li><a href="{{ route('customer.promotions') }}">Promotions</a></li>
-            <li><a href="{{ route('booking.form') }}">Book Now</a></li>
+            <li><a href="{{ route('customer.bookingpage') }}">Book Now</a></li>
             <li><a href="{{ route('booking.schedule') }}">Booking</a></li>
         </ul>
 

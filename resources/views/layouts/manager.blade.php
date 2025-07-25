@@ -24,6 +24,7 @@
       <a href="{{ route('manager.appointment') }}" class="menu-item"><i class="fas fa-book-open"></i> Appointment</a>
       <a href="{{ route('manager.custlist') }}" class="menu-item"><i class="fas fa-user-friends"></i> Customer List</a>
       <a href="{{ route('manager.feedback') }}" class="menu-item"><i class="fas fa-tachometer-alt"></i> Feedback</a>
+      <a href="{{ route('manager.profile') }}" class="menu-item"><i class="fas fa-user-friends"></i>Manage Profile</a>
     </div>
   </div>
   <div class="sidebar-bottom">

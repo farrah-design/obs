@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Service;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,13 @@ class ServiceController extends Controller
 
     return view('admin.manage-service', compact('services'));
 }
+
+public function viewServiceList()
+    {
+        $services = Service::all();
+            
+        return view('customer.servicelist', compact('services'));    
+    }
 
     public function create(Request $request) {
         $validated = $request->validate([
@@ -40,7 +48,7 @@ class ServiceController extends Controller
 
         return back()->with('success', 'Service created successfully');
     }
-    
+
     public function update(Request $request){
 
         $validated = $request->validate([
