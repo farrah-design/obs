@@ -247,6 +247,15 @@ color: #555;
   margin-top: 50px;
 }
 
+.schedule-content ul {
+  margin: 1em 0;
+  padding-left: 20px; /* Ensures bullets/numbers are visible */
+}
+
+.schedule-content li {
+  margin-bottom: 8px; /* Adds space between items */
+}
+
 /* Status cards */
 .status-cards {
   display: flex;

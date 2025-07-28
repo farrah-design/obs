@@ -14,6 +14,7 @@
   <nav>
     <a href="{{ url('/main') }}">Home</a>
     <a href="{{ url('/customer/servicelist') }}">Services</a>
+    <a href="{{ route('customer.promotions') }}">Promotions</a>
     <a href="{{ url('/customer/bookingschedule') }}">Booking</a>
     <a href="{{ url('/customer/bookingpage') }}">Book Now</a>
   </nav>

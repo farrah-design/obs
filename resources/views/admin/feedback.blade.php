@@ -4,15 +4,22 @@
 
 @section('head')
   <link rel="stylesheet" href="/css/admin-feedback.css">
+  <style>
+    .star-rating {
+      color: gold;
+      font-size: 1.2em;
+      letter-spacing: 2px;
+    }
+  </style>
 @endsection
 
-@section('content') 
+@section('content')
 <div class="main-content">
   <div class="header">
     <h1>Customer Feedback</h1>
   </div>
 
-  <table>
+  <table class="feedback-table">
     <thead>
       <tr>
         <th>Customer</th>
@@ -22,7 +29,20 @@
       </tr>
     </thead>
     <tbody id="feedbackTableBody">
-      <!-- Feedback rows will be populated by JavaScript -->
+      @foreach($feedback as $item)
+      <tr>
+        <td>{{ $item->customer->name }}</td>
+        <td>
+          <span class="star-rating">
+            @for($i = 1; $i <= 5; $i++)
+              @if($i <= $item->rating) ★ @else ☆ @endif
+            @endfor
+          </span>
+        </td>
+        <td>{{ $item->comment }}</td>
+        <td>{{ $item->date->format('Y-m-d') }}</td>
+      </tr>
+      @endforeach
     </tbody>
   </table>
 </div>
@@ -30,47 +50,13 @@
 
 @section('scripts')
 <script>
-  const feedbackData = [
-    {
-      customer: "Amira",
-      rating: 4,  // Changed to number
-      feedback: "Loved the service!",
-      date: "2025-06-23"
-    },
-    {
-      customer: "Jason",
-      rating: 5,  // Changed to number and fixed property name (was 'service')
-      feedback: "It was good, but slow.",
-      date: "2025-06-22"
-    }
-  ];
-
-  function renderStarRating(rating) {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-      stars += i <= rating ? '★' : '☆';
-    }
-    return `<span class="star-rating">${stars}</span>`;
-  }
-    
-  function populateTable() {
-    const tbody = document.getElementById("feedbackTableBody");
-    tbody.innerHTML = ''; // Clear existing rows
-    
-    feedbackData.forEach((item) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${item.customer}</td>
-        <td>${renderStarRating(item.rating)}</td>
-        <td>${item.feedback}</td>
-        <td>${item.date}</td>
-      `;
-      tbody.appendChild(row);
+  document.addEventListener('DOMContentLoaded', function() {
+    // You can keep this for any additional functionality
+    document.querySelectorAll('.feedback-table tr').forEach(row => {
+      row.addEventListener('click', function() {
+        // Handle row click if needed
+      });
     });
-  }
-
-  // Initialize table on load
-  document.addEventListener('DOMContentLoaded', populateTable);
+  });
 </script>
 @endsection
-

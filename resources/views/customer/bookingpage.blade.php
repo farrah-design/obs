@@ -80,18 +80,29 @@
           <input type="tel" id="phone" value="{{ $customer->phone }}" readonly>
         </div>
         
-        <div class="form-group">
-          <label for="stylist">Preferred Stylist (Optional)</label>
-          <select id="stylist">
-            <option value="Any Stylist">Any Stylist</option>
-            <option value="Nana">Nana (Senior Haircut Specialist/Curly & Perming hair specialist)</option>
-            <option value="Suni">Suni (Senior Haircut Specialist/Extensions & Hair Enhancements/Hair Rebonding)</option>
-            <option value="Ida">Ida (Senior Haircut Specialist/Hair Rebonding)</option>
-            <option value="Vina">Vina (Junior Haircut Specialist/Hair Treatment)</option>
-            <option value="Habib">Habib (Color Specialist/Extensions & Hair Enhancements)</option>
-            <option value="Era">Era (Color Specialist/Hair Treatment)</option>
-          </select>
-        </div>
+                 <div class="form-group">
+           <label for="stylist">Preferred Stylist (Optional)</label>
+           <select id="stylist">
+             <option value="Any Stylist">Any Stylist</option>
+            @foreach ( $staffMembers as $staff )
+            <option value="{{ $staff->name }}">
+                {{ $staff->name }} 
+                @if($staff->role === 'admin')
+                    (Owner)
+                @elseif($staff->role === 'manager')
+                    (Manager)
+                @else
+                @endif
+            </option>
+             @endforeach
+           </select>
+           <div id="staffAvailabilityMessage" class="staff-availability-message" style="display: none;"></div>
+           <div id="staffAvailabilityWarning" class="staff-availability-warning" style="display: none;">
+             <i class="fas fa-exclamation-triangle"></i>
+             <span>You cannot proceed with an unavailable stylist. Please choose "Any Stylist" or select a different time.</span>
+             <button type="button" class="btn-any-stylist" onclick="selectAnyStylist()">Choose Any Stylist</button>
+           </div>
+         </div>
         
         <div class="form-group full-width">
           <label for="notes">Special Requests (Optional)</label>
@@ -142,6 +153,7 @@
     <input type="hidden" name="email" id="formEmail">
     <input type="hidden" name="stylist" id="formStylist">
     <input type="hidden" name="notes" id="formNotes">
+    <a id="whatsappLink" style="display:none;"></a>
   </form>
 @endsection
 
@@ -184,78 +196,86 @@
       }
     }
 
-    function loadAvailableTimes() {
-      const date = document.getElementById('bookingDate').value;
-      if (!date) return;
-      
-      // In a real app, this would come from your backend
-      // These are mock available times
-      const allTimes = [
-        '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', 
-        '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM'
-      ];
-      
-      // Randomly mark some times as booked for demo purposes
-      const availableTimes = allTimes.filter(time => Math.random() > 0.3);
-      
+function loadAvailableTimes() {
+  const date = document.getElementById('bookingDate').value;
+  if (!date) return;
+
+  fetch(`/customer/bookingpage/available-slots?date=${date}`)
+    .then(response => response.json())
+    .then(times => {
       const container = document.getElementById('timeSlots');
       container.innerHTML = '';
-      
-      if (availableTimes.length === 0) {
+
+      if (times.length === 0) {
         container.innerHTML = '<p>No available times for this date. Please choose another date.</p>';
         return;
       }
-      
-      availableTimes.forEach(time => {
+
+      times.forEach(time => {
         const slot = document.createElement('div');
         slot.className = 'time-slot';
         slot.textContent = time;
-        slot.onclick = function() {
-          document.querySelectorAll('.time-slot').forEach(s => {
-            s.classList.remove('selected');
-          });
+        slot.onclick = function () {
+          document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
           this.classList.add('selected');
           selectedDateTime = `${date} ${time}`;
         };
         container.appendChild(slot);
       });
-    }
+    })
+    .catch(error => {
+      console.error('Failed to load times:', error);
+    });
+}
 
-    function nextStep() {
-      console.log('nextStep called, currentStep:', currentStep);
-      // Validate current step before proceeding
-      if (currentStep === 1 && selectedServices.length === 0) {
-        alert('Please select at least one service');
-        return;
-      }
-      if (currentStep === 2 && !selectedDateTime) {
-        alert('Please select a date and time');
-        return;
-      }
-      if (currentStep === 3) {
-        try {
-          const nameInput = document.getElementById('name');
-          const phoneInput = document.getElementById('phone');
-          const stylistInput = document.getElementById('stylist');
-          const notesInput = document.getElementById('notes');
 
-          const name = nameInput ? nameInput.value.trim() : '';
-          const phone = phoneInput ? phoneInput.value.trim() : '';
-          const stylist = stylistInput ? stylistInput.value : '';
-          const notes = notesInput ? notesInput.value.trim() : '';
 
-          if (!name || !phone) {
-            alert('Please fill in all required fields (marked with *)');
-            return;
-          }
-          if (!selectedDateTime) {
-            alert('Please select a date and time');
-            return;
-          }
-          if (isNaN(new Date(selectedDateTime).getTime())) {
-            alert('Please select a valid date and time');
-            return;
-          }
+    async function nextStep() {
+       console.log('nextStep called, currentStep:', currentStep);
+       // Validate current step before proceeding
+       if (currentStep === 1 && selectedServices.length === 0) {
+         alert('Please select at least one service');
+         return;
+       }
+       if (currentStep === 2 && !selectedDateTime) {
+         alert('Please select a date and time');
+         return;
+       }
+             if (currentStep === 3) {
+         try {
+           const nameInput = document.getElementById('name');
+           const phoneInput = document.getElementById('phone');
+           const stylistInput = document.getElementById('stylist');
+           const notesInput = document.getElementById('notes');
+
+           const name = nameInput ? nameInput.value.trim() : '';
+           const phone = phoneInput ? phoneInput.value.trim() : '';
+           const stylist = stylistInput ? stylistInput.value : '';
+           const notes = notesInput ? notesInput.value.trim() : '';
+
+           if (!name || !phone) {
+             alert('Please fill in all required fields (marked with *)');
+             return;
+           }
+           if (!selectedDateTime) {
+             alert('Please select a date and time');
+             return;
+           }
+           if (isNaN(new Date(selectedDateTime).getTime())) {
+             alert('Please select a valid date and time');
+             return;
+           }
+
+           // Check if specific stylist is selected and validate availability
+           if (stylist && stylist !== 'Any Stylist') {
+             const selectedDate = document.getElementById('bookingDate').value;
+             const selectedTime = document.querySelector('.time-slot.selected');
+             
+             if (selectedTime) {
+               const time = selectedTime.textContent;
+               
+             }
+           }
           // Prepare confirmation details
           console.log('selectedServices:', selectedServices);
           console.log('selectedDateTime:', selectedDateTime);
@@ -390,68 +410,77 @@
       return new Date(dateTimeStr).toLocaleDateString('en-US', options);
     }
 
-   function submitBookingToBackend() {
-  const customerName = document.getElementById('name').value.trim();
-  const phoneNumber = document.getElementById('phone').value.trim();
-  const emailInput = document.getElementById('email');
-  const email = emailInput ? emailInput.value.trim() : '';
-  const stylist = document.getElementById('stylist').value || 'Any Stylist';
-  const notes = document.getElementById('notes').value.trim();
+    function submitBookingToBackend() {
+        // Get form values
+        const form = document.getElementById('bookingForm');
+        const customerName = document.getElementById('name').value.trim();
+        const phoneNumber = document.getElementById('phone').value.trim();
+        const emailInput = document.getElementById('email');
+        const email = emailInput ? emailInput.value.trim() : '';
+        const stylist = document.getElementById('stylist').value || 'Any Stylist';
+        const notes = document.getElementById('notes').value.trim();
 
-  // WhatsApp message prep
-  const whatsappMessage = `
-    Hello Sarlini Salon! I would like to book an appointment:\n\n
-    *Service IDs:* ${selectedServices.join(', ')}\n
-    *Date & Time:* ${formatDateTime(selectedDateTime)}\n
-    *Name:* ${customerName}\n
-    *Phone:* ${phoneNumber}\n
-    ${email ? `*Email:* ${email}\\n` : ''}
-    *Preferred Stylist:* ${stylist}\n
-    ${notes ? `*Special Requests:* ${notes}` : ''}\n\n
-    Please confirm my appointment. Thank you!`
-    .replace(/\n        /g, '\n')
-    .trim();
+        // Prepare WhatsApp message
+        const whatsappMessage = `
+            Hello Sarlini Salon! I would like to book an appointment:\n\n
+            *Service IDs:* ${selectedServices.join(', ')}\n
+            *Date & Time:* ${formatDateTime(selectedDateTime)}\n
+            *Name:* ${customerName}\n
+            *Phone:* ${phoneNumber}\n
+            ${email ? `*Email:* ${email}\\n` : ''}
+            *Preferred Stylist:* ${stylist}\n
+            ${notes ? `*Special Requests:* ${notes}` : ''}\n\n
+            Please confirm my appointment. Thank you!`
+            .replace(/\n        /g, '\n')
+            .trim();
 
-  // Append dynamic service inputs if not already there
-  const form = document.getElementById('bookingForm');
+        // Clear existing service inputs
+        const existingServiceInputs = form.querySelectorAll('input[name="services[]"]');
+        existingServiceInputs.forEach(input => input.remove());
 
-  // Clear existing service inputs
-  const existingServiceInputs = form.querySelectorAll('input[name="services[]"]');
-  existingServiceInputs.forEach(input => input.remove());
+        // Add selected services to form
+        selectedServices.forEach(serviceId => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'services[]';
+            input.value = serviceId;
+            form.appendChild(input);
+        });
 
-  // Append selected services
-  selectedServices.forEach(serviceId => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'services[]';
-    input.value = serviceId;
-    form.appendChild(input);
-  });
+        // Set form values
+        const [date, time] = selectedDateTime.split(' ');
+        document.getElementById('formDate').value = date;
+        document.getElementById('formTime').value = time;
+        document.getElementById('formName').value = customerName;
+        document.getElementById('formPhone').value = phoneNumber;
+        document.getElementById('formEmail').value = email;
+        document.getElementById('formStylist').value = stylist;
+        document.getElementById('formNotes').value = notes;
 
-  // Set date and time
-  const [date, time] = selectedDateTime.split(' ');
-  document.getElementById('formDate').value = date;
-  document.getElementById('formTime').value = time;
+        // Store WhatsApp message in localStorage to use after submission
+        localStorage.setItem('pendingWhatsappMessage', whatsappMessage);
 
-  // Set other fields
-  document.getElementById('formName').value = customerName;
-  document.getElementById('formPhone').value = phoneNumber;
-  document.getElementById('formEmail').value = email;
-  document.getElementById('formStylist').value = stylist;
-  document.getElementById('formNotes').value = notes;
+        const message = localStorage.getItem('pendingWhatsappMessage');
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/60132918836?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+        localStorage.removeItem('pendingWhatsappMessage');
+        
 
-  // Submit the form first
-  form.submit();
+        // Trigger form submission
+        form.submit();
+    }
 
-  // Open WhatsApp after slight delay to ensure form submits
-  setTimeout(() => {
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/60132918836?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-  }, 500); // 0.5 second delay
-}
 
-  </script>
+
+
+   // Function to select "Any Stylist" option
+   function selectAnyStylist() {
+     document.getElementById('stylist').value = 'Any Stylist';
+     document.getElementById('staffAvailabilityMessage').style.display = 'none';
+     document.getElementById('staffAvailabilityWarning').style.display = 'none';
+   }
+</script>
 @endsection
 
 

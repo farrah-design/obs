@@ -90,7 +90,7 @@
             <div class="footer-column">
                 <h3>Contact Us</h3>
                 <div class="contact-info">
-                    <p><i class="fas fa-phone"></i> +6014-562 8065</p>
+                    <p><i class="fas fa-phone"></i> +6013-291 8836</p>
                     <p><i class="fas fa-clock"></i> Open Daily: 8am - 8pm</p>
                 </div>
             </div>

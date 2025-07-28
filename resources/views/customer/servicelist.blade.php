@@ -4,6 +4,7 @@
 
 @section('head')
   <link rel="stylesheet" href="/css/service-list.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 @endsection
 
 @section('content') 
@@ -13,7 +14,7 @@
 <div class="service-container">
     @foreach($services as $service)
     <div class="service-card">
-        <h2><i class="fas {{ $service->icon }}" id="service-icon"></i>{{ $service->serviceName }}</h2>
+        <h2><i class="fas fa-cut" id="service-icon"></i>{{ $service->serviceName }}</h2>
         <p>{{ $service->description }}</p>
         
         @if($service->details)
@@ -26,7 +27,7 @@
         @endif
         
         <h3>Price: RM{{ number_format($service->price, 2) }}</h3>
-        <h3>Duration: ~{{ $service->duration }} minutes</h3>
+        <h3>Duration: ~{{ $service->duration }} Hour(s)</h3>
     </div>
     @endforeach
 </div>

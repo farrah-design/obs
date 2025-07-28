@@ -35,8 +35,8 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'staff_id' => 'required|exists:staff,staffID',
             'date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
         ]);
 
         // Generate date-based ID (SCH-YYYYMMDD-XXX)
@@ -71,8 +71,16 @@ class ScheduleController extends Controller
         $scheduleID = "SCH-{$datePart}-" . str_pad($sequence, 3, '0', STR_PAD_LEFT);
 
         Schedule::create([
-            'scheduleID' => $scheduleID,
-            ...$validated
+            'scheduleID' => $scheduleID,  // Your custom/generated ID
+            'staffID' => $validated['staff_id'],
+            'date' => $validated['date'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+    
+            // Additional recommended fields
+            'status' => 'active', // Default status
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return redirect()->route('admin.manage-schedule')
@@ -83,24 +91,38 @@ class ScheduleController extends Controller
     /**
      * Update the specified schedule.
      */
-    public function update(Request $request, Schedule $schedule)
+    public function update(Request $request)
     {
-        $validated = $this->validateSchedule($request, $schedule->scheduleID);
+        // Get the schedule ID from the request
+        $scheduleId = $request->scheduleID;
         
-        $schedule->update($validated);
+        // Find the schedule by ID
+        $schedule = Schedule::findOrFail($scheduleId);
+        
+        // Validate input
+        $request->validate([
+            'status' => 'required|in:available,unavailable,off-day',
+        ]);
 
-        return redirect()->route('admin.manage-schedule')
-            ->with('success', 'Schedule updated successfully');
+        // Update schedule
+        $schedule->status = $request->status;
+        $schedule->save();
+
+        return redirect()->back()->with('success', 'Schedule status updated successfully.');
     }
 
     /**
      * Remove the specified schedule.
      */
-    public function delete(Schedule $schedule)
+    public function delete(Request $request)
     {
+        $scheduleId = $request->scheduleID;
+        
+        // Find the schedule by ID
+        $schedule = Schedule::findOrFail($scheduleId);
+
         $schedule->delete();
-        return redirect()->route('admin.delete-schedule')
-            ->with('success', 'Schedule deleted successfully');
+        return back()->with('success', 'Schedule deleted successfully');
     }
 
     /**
@@ -111,9 +133,9 @@ class ScheduleController extends Controller
         $rules = [
             'staffID' => 'required|exists:users,staffID',
             'date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'status' => ['required', Rule::in(['available', 'unavailable', 'break'])]
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
+            'status' => ['required', Rule::in(['available', 'unavailable', 'offday'])]
         ];
 
         return $request->validate($rules);
@@ -127,7 +149,7 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'staffID' => 'required|exists:users,staffID',
             'date' => 'required|date',
-            'time' => 'required|date_format:H:i'
+            'time' => 'required'
         ]);
 
         $available = Schedule::where('staffID', $validated['staffID'])

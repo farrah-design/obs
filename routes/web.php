@@ -31,19 +31,6 @@ Route::get('/admin/admin-all', function () {
     return view('admin.admin-all');
 })->name('admin.allappointment');
 
-Route::get('/admin/notification', function () {
-    return view('admin.notification');
-})->name('admin.notification');
-
-
-Route::get('/admin/admin-schedule', function () {
-    return view('admin.admin-schedule');
-})->name('admin.schedule');
-
-
-Route::get('/admin/feedback', function () {
-    return view('admin.feedback');
-})->name('admin.feedback');
 
 Route::get('/admin/manage-promo', function () {
     return view('admin.manage-promo');
@@ -81,10 +68,6 @@ Route::get('/manager/m-feedback', function () {
 
 //customer routes
 
-Route::get('/customer/bookingschedule', function () {
-    return view('customer.bookingschedule');
-})->name('customer.bookingschedule');
-
 
 Route::get('/customer/promotions', function () {
     return view('customer.promotions');
@@ -112,7 +95,12 @@ Route::post('/customer/profile/updatePassword', [\App\Http\Controllers\CustomerP
 //appointment routes
 Route::get('/customer/bookingpage', [\App\Http\Controllers\AppointmentController::class, 'viewAppointment'])->name('customer.bookingpage');
 
+Route::get('/customer/bookingpage/available-slots', [\App\Http\Controllers\AppointmentController::class, 'getAvailableSlots'])->name('customer.availableslots');
+Route::get('/customer/bookingpage/available-staff', [\App\Http\Controllers\AppointmentController::class, 'getAvailableStaff'])->name('customer.availablestaff');
+
 Route::post('/customer/bookingpage/store', [\App\Http\Controllers\AppointmentController::class, 'store'])->name('booking.store');
+
+Route::post('/customer/bookingschedule/reschedule', [\App\Http\Controllers\AppointmentController::class, 'reschedule'])->name('booking.reschedule');
 
 Route::get('/customer/bookingschedule', [\App\Http\Controllers\AppointmentController::class, 'viewAschedule'])->name('booking.schedule');
 
@@ -126,11 +114,10 @@ Route::get('/admin/admin-all', [\App\Http\Controllers\AppointmentController::cla
 
 Route::post('/admin/feedback/close', [\App\Http\Controllers\AppointmentController::class, 'cancelStatus'])->name('admin.closeStatus');
 
+
 //feedback routes
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.submit');
 Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'show'])->name('admin.feedback');
-Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'customerFeedback'])->name('admin.feedback');
-Route::get('/admin/feedback', [\App\Http\Controllers\FeedbackController::class, 'recent'])->name('admin.feedback');
 
 
 //customer details routes
@@ -156,6 +143,8 @@ Route::post('/admin/update-schedule', [\App\Http\Controllers\ScheduleController:
 
 Route::post('/admin/delete-schedule', [\App\Http\Controllers\ScheduleController::class, 'delete'])->name('admin.delete-schedule');
 
+
+
 //staff routes
 Route::get('/admin/admin-profile', [\App\Http\Controllers\StaffProfileController::class, 'view'])->name('admin.profile');
 
@@ -178,5 +167,11 @@ Route::post('/admin/delete-promo', [\App\Http\Controllers\PromotionController::c
 //report route
 Route::post('/reports/weekly-pdf', [\App\Http\Controllers\ReportController::class, 'downloadPdf'])
      ->name('reports.weekly.pdf');
-     // web.php
+
+
 Route::get('/admin/admin-dashboard', [\App\Http\Controllers\ReportController::class, 'view'])->name('admin.dashboard');
+
+Route::get('/admin/notification', [\App\Http\Controllers\NotificationController::class, 'view'])->name('admin.notification');
+Route::post('/admin/notification/appointment', [\App\Http\Controllers\NotificationController::class, 'appointmentNotification'])->name('admin.appointment-reminder');
+Route::post('/admin/notification/promotion', [\App\Http\Controllers\NotificationController::class, 'promotionNotification'])->name('admin.promotion-reminder');
+Route::post('/admin/notification/feedback', [\App\Http\Controllers\NotificationController::class, 'feedbackNotification'])->name('admin.feedback-reminder');

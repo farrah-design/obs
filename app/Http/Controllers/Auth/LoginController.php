@@ -24,7 +24,7 @@ class LoginController
             $staff = Auth::guard('staff')->user();
 
             if ($staff->role === 'manager') {
-                return redirect()->intended('manager/m-dashboard');
+                return redirect()->intended('admin/admin-dashboard');
             } elseif ($staff->role === 'admin') {
                 return redirect()->intended('admin/admin-dashboard');
             }

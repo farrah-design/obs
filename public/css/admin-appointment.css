@@ -249,10 +249,10 @@ color: #555;
   background-color: #4CAF50; 
 }
 .completed {
-  background-color: #2441e3; 
+  background-color: #007bff; 
 }
 .cancelled {
-  background-color: #832121; 
+  background-color: Red; 
 }
 
 /* Actions button */

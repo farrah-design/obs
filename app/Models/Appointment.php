@@ -25,6 +25,7 @@ class Appointment extends Model
         'status',
     ];
 
+
     // In Appointment.php
     public function services()
     {

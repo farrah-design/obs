@@ -12,6 +12,21 @@
     <h2>Schedule</h2>
   </div>
 
+  <!-- Error and Success Messages -->
+  @if(session('error'))
+    <div class="alert alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ session('error') }}
+    </div>
+  @endif
+
+  @if(session('success'))
+    <div class="alert alert-success">
+      <i class="fas fa-check-circle"></i>
+      {{ session('success') }}
+    </div>
+  @endif
+
   <!-- Schedule Section -->
   <div class="schedule-section">
     <div class="schedule-header">
@@ -27,23 +42,33 @@
           <th>Time</th>
           <th>Staff</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         @foreach($schedules as $schedule)
         <tr>
-          <td>{{ $schedule->date }}</td>
-          <td>{{ $schedule->start_time }}</td>
+          <td>{{ $schedule->date->format('Y-m-d') }}</td>
+          <td>{{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}</td>
           <td>{{ $schedule->staff->name }}</td>
           <td>
-            <form action="{{ route('admin.update-schedule', $schedule->id) }}" method="POST" class="status-form">
+            <form action="{{ route('admin.update-schedule') }}" method="POST" class="status-form">
               @csrf
-              @method('PATCH')
               <select name="status" class="status-select" onchange="this.form.submit()">
-                <option value="Available" {{ $schedule->status == 'Available' ? 'selected' : '' }}>Available</option>
-                <option value="Available" {{ $schedule->status == 'Unavailable' ? 'selected' : '' }}>Unavailable</option>
-                <option value="offday" {{ $schedule->status == 'offday' ? 'selected' : '' }}>Off-day</option>
+                <option value="available" {{ $schedule->status == 'available' ? 'selected' : '' }}>Available</option>
+                <option value="unavailable" {{ $schedule->status == 'unavailable' ? 'selected' : '' }}>Unavailable</option>
+                <option value="off-day" {{ $schedule->status == 'off-day' ? 'selected' : '' }}>Off-day</option>
               </select>
+              <input type="hidden" name="scheduleID" value="{{ $schedule->scheduleID }}">
+            </form>
+          </td>
+          <td>
+            <form action='{{ route("admin.delete-schedule") }}' method='POST'>
+              @csrf
+              <input type="hidden" name="scheduleID" value="{{ $schedule->scheduleID }}">
+              <button type="submit" class="delete-btn" >
+                <i class="fas fa-trash"></i> Delete
+              </button>
             </form>
           </td>
         </tr>
@@ -74,9 +99,9 @@
         <div class="form-group">
           <label for="status">Status</label>
           <select id="status" name="status" class="form-control" required>
-            <option value="Available">Available</option>
-            <option value="Unavailable">Unavailable</option>
-            <option value="offday">Off-day</option>
+            <option value="available">Available</option>
+            <option value="unavailable">Unavailable</option>
+            <option value="off-day">Off-day</option>
           </select> 
         </div>
         <div class="form-group">
@@ -98,6 +123,8 @@
 
 @section('scripts')
 <script>
+
+
   function loadAvailableTimes() {
       const date = document.getElementById('date').value;
       if (!date) return;
@@ -173,6 +200,7 @@
       });
     }
   });
+
 </script>
 @endsection
 

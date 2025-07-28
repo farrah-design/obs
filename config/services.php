@@ -36,9 +36,10 @@ return [
     ],
 
     'ultramsg' => [
-    'instance_id' => env('ULTRAMSG_INSTANCE_ID'),
-    'token' => env('ULTRAMSG_TOKEN'),
-],
+        'api_key' => env('ULTRA_MSG_API_KEY'),
+        'instance_id' => env('ULTRA_MSG_INSTANCE_ID'),
+        'api_url' => env('ULTRA_MSG_API_URL'),
+    ],
 
 
 ];

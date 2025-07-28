@@ -314,6 +314,37 @@ color: #555;
     border-radius: 4px;
     font-size: 14px;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+
+  .popup form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  .popup form select:hover {
+    border-color: #bb3d87;
+    box-shadow: 0 2px 4px rgba(187, 61, 135, 0.1);
+  }
+
+  .popup form select:focus {
+    outline: none;
+    border-color: #bb3d87;
+    box-shadow: 0 0 0 3px rgba(187, 61, 135, 0.1);
+  }
+
+  .popup form input[type="text"]:focus,
+  .popup form input[type="time"]:focus {
+    outline: none;
+    border-color: #bb3d87;
+    box-shadow: 0 0 0 3px rgba(187, 61, 135, 0.1);
   }
 
   .popup .btn-group {
@@ -408,4 +439,138 @@ color: #555;
 
 .details-btn:hover {
   background-color: #8f1742;
+}
+
+/* Delete button */
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-btn i {
+  font-size: 12px;
+}
+
+/* Status Select Dropdown Styling */
+.status-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.status-select:hover {
+  border-color: #bb3d87;
+  box-shadow: 0 2px 4px rgba(187, 61, 135, 0.1);
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #bb3d87;
+  box-shadow: 0 0 0 3px rgba(187, 61, 135, 0.1);
+}
+
+.status-select option {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+/* Status-specific styling */
+.status-select option[value="available"] {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-select option[value="unavailable"] {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.status-select option[value="off-day"] {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+/* Status form container */
+.status-form {
+  display: inline-block;
+  margin: 0;
+}
+
+/* Responsive dropdown */
+@media (max-width: 768px) {
+  .status-select {
+    min-width: 100px;
+    font-size: 12px;
+    padding: 6px 10px;
+    padding-right: 28px;
+    background-size: 14px;
+  }
+}
+
+/* Alert Messages */
+.alert {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert i {
+  font-size: 16px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

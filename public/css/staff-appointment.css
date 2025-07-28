@@ -341,6 +341,16 @@ color: #555;
   background-color: transparent;
 }
 
+.confirmed {
+  background-color: #4CAF50; 
+}
+.completed {
+  background-color: #007bff; 
+}
+.cancelled {
+  background-color: Red; 
+}
+
 .logout-btn {
   padding: 8px 16px;
   border: 1px solid #343a40;

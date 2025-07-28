@@ -39,7 +39,11 @@
           </td>
           <td>
             @if(in_array($appointment->status, ['confirmed', 'pending']))
-              <button class="edit-btn" onclick="showRescheduleModal('{{ $appointment->appointmentID }}', '{{ $appointment->date }}', '{{ $appointment->time }}')">
+              <button class="edit-btn" onclick="showRescheduleModal(
+                '{{ $appointment->appointmentID }}',
+                '{{ \Carbon\Carbon::parse($appointment->date)->format('Y-m-d') }}',
+                '{{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}'
+              )">
                 Reschedule
               </button>
 
@@ -83,9 +87,8 @@
       <p><strong>Current Date:</strong> <span id="currentDate"></span></p>
       <p><strong>Current Time:</strong> <span id="currentTime"></span></p>
     </div>
-    <form id="rescheduleForm" action="{{ route('admin.appointment') }}" method="POST">
+    <form id="rescheduleForm" action="{{ route('booking.reschedule') }}" method="POST">
       @csrf
-      @method('PUT')
       <input type="hidden" id="appointmentId" name="appointment_id">
       <div>
         <label for="newDate">New Date</label>
@@ -163,19 +166,54 @@
 
 @section('scripts')
 <script>
-// Reschedule modal handlers
+
+
 function showRescheduleModal(appointmentId, date, time) {
   const modal = document.getElementById('rescheduleModal');
-  document.getElementById('appointmentId').value = appointmentId;
-  document.getElementById('currentDate').textContent = date;
-  document.getElementById('currentTime').textContent = time;
+  const form = document.getElementById('rescheduleForm');
   
-  // Set minimum date to tomorrow
+  // Validate inputs
+  if (!appointmentId || !date || !time) {
+    console.error('Missing required parameters');
+    return;
+  }
+
+  // Set form values
+  form.appointment_id.value = appointmentId;
+  
+  // Format time from "08:00" to "8:00 AM" if needed
+  const formattedTime = formatTimeForDisplay(time);
+  document.getElementById('currentDate').textContent = formatDateForDisplay(date);
+  document.getElementById('currentTime').textContent = formattedTime;
+
+  // Set minimum date (tomorrow)
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   document.getElementById('newDate').min = tomorrow.toISOString().split('T')[0];
   
+  // Reset form and show modal
+  form.reset();
   modal.style.display = 'flex';
+  
+  // Add escape key handler
+  document.addEventListener('keydown', function escHandler(e) {
+    if (e.key === 'Escape') hideRescheduleModal();
+  });
+}
+// Helper function to format time for display
+function formatTimeForDisplay(time) {
+  if (time.includes('AM') || time.includes('PM')) return time;
+  
+  const [hours, minutes] = time.split(':');
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const displayHours = hours % 12 || 12;
+  
+  return `${displayHours}:${minutes} ${period}`;
+}
+// Helper function to format date for display
+function formatDateForDisplay(dateString) {
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
 function hideRescheduleModal() {
@@ -216,15 +254,59 @@ window.onclick = function(event) {
   }
 };
 
-// Form submissions
-document.getElementById('rescheduleForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const formData = new FormData(this);
-  // Add AJAX call here to submit the reschedule request
-  alert('Appointment rescheduled successfully!');
-  hideRescheduleModal();
-  // You might want to reload the page or update the table
-});
+document.getElementById('newDate').addEventListener('change', loadAvailableTimes);
+
+function loadAvailableTimes() {
+  const date = document.getElementById('newDate').value;
+  if (!date) return;
+
+  fetch(`/customer/bookingpage/available-slots?date=${date}`)
+    .then(response => response.json())
+    .then(availableTimes => {
+      const timeSelect = document.getElementById('newTime');
+      
+      // Clear existing options except the first one
+      timeSelect.innerHTML = '<option value="">Select a time</option>';
+      
+      if (availableTimes.length === 0) {
+        // Disable select and show message
+        timeSelect.disabled = true;
+        timeSelect.innerHTML += '<option value="" disabled>No available times for this date</option>';
+        return;
+      }
+      
+      // Enable select if it was disabled
+      timeSelect.disabled = false;
+      
+      // Filter and sort the available times to match your design
+      const formattedTimes = availableTimes
+        .map(time => {
+          // Convert "08:00" format to "8:00 AM" format
+          const [hours, minutes] = time.split(':');
+          const period = hours >= 12 ? 'PM' : 'AM';
+          const displayHours = hours % 12 || 12;
+          return `${displayHours}:${minutes} ${period}`;
+        })
+        .sort((a, b) => {
+          // Sort times chronologically
+          return new Date(`2000-01-01 ${a}`) - new Date(`2000-01-01 ${b}`);
+        });
+      
+      // Add available times to select
+      formattedTimes.forEach(time => {
+        const option = document.createElement('option');
+        option.value = time;
+        option.textContent = time;
+        timeSelect.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Failed to load times:', error);
+      const timeSelect = document.getElementById('newTime');
+      timeSelect.innerHTML = '<option value="">Error loading times</option>';
+      timeSelect.disabled = true;
+    });
+}
 
 </script>
 @endsection

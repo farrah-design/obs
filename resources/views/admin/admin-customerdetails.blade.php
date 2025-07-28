@@ -25,17 +25,11 @@
             </div>
           </div>
           
-          <a href="{{ route('admin.appointment', ['customerID' => $customer->customerID]) }}" class="view-appointments">View Appointments</a>
           
           <div class="contact-info">
             <div class="contact">
               <span>📞</span>
               <span>{{ $customer->phone ?? '-' }}</span>
-            </div>
-            <div class="contact">
-              <span>👤</span>
-              <span><div class="avatar">{{ strtoupper(substr($customer->name, 0, 1)) }}</div>
-              </span>
             </div>
           </div>
         </div>
@@ -60,4 +54,3 @@
 });
 </script>
 @endsection
-

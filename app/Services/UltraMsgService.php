@@ -3,37 +3,46 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class UltraMsgService
 {
+    protected $apiKey;
     protected $instanceId;
-    protected $token;
 
     public function __construct()
     {
+        $this->apiKey = config('services.ultramsg.api_key');
         $this->instanceId = config('services.ultramsg.instance_id');
-        $this->token = config('services.ultramsg.token');
     }
 
-    public function sendWhatsAppMessage($to, $message)
+    /**
+     * Send a WhatsApp message
+     */
+    public function sendMessage(string $to, string $message)
     {
-        $url = "https://api.ultramsg.com/{$this->instanceId}/messages/chat";
-
-        $response = Http::asForm()->post($url, [
-            'token' => $this->token,
-            'to' => $to,
+        $response = Http::post(config('services.ultramsg.api_url') . "/messages/chat", [
+            'token' => $this->apiKey,
+            'to' => $to, // Format: "14155552671" (no +)
             'body' => $message,
         ]);
 
-        // Optional: Log for admin dashboard analytics
-        Log::info('UltraMsg Response', [
+        return $response->json();
+    }
+
+    /**
+     * Send an image with a caption
+     */
+    public function sendImage(string $to, string $imageUrl, string $caption = '')
+    {
+        $response = Http::post("https://api.ultramsg.com/{$this->instanceId}/messages/image", [
+            'token' => $this->apiKey,
             'to' => $to,
-            'message' => $message,
-            'status' => $response->status(),
-            'body' => $response->body(),
+            'image' => $imageUrl,
+            'caption' => $caption,
         ]);
 
-        return $response->successful();
+        return $response->json();
     }
+
+    // Add more methods for documents, buttons, etc.
 }

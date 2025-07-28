@@ -22,8 +22,7 @@ return new class extends Migration
                   ->on('staff') // Make sure this is your staff table name
                   ->onDelete('cascade');
 
-            // Composite unique constraint to prevent duplicate schedules
-            $table->unique(['staffID']);
+            // Remove unique constraint to allow multiple schedules per staff
         });
 
     }

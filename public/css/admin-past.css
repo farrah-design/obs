@@ -371,3 +371,13 @@ color: #555;
 .send-btn:hover {
   background-color: #155a96;
 }
+
+.confirmed {
+  background-color: #4CAF50; 
+}
+.completed {
+  background-color: #007bff; 
+}
+.cancelled {
+  background-color: Red; 
+}

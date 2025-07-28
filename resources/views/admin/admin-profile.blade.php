@@ -100,7 +100,7 @@
 </form>
 
     <div class="back-link">
-      <a href="{{ route ('main') }}">← Back to Home</a>
+      <a href="{{ route ('admin.dashboard') }}">← Back to Home</a>
     </div>
   </div>
 @endsection

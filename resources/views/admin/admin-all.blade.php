@@ -15,6 +15,10 @@
 <div class="section">
 <!-- Tabs container -->
 <div class="tab-container">
+   <a href="{{ route('admin.allappointment') }}" 
+        class="tab-btn {{ request()->routeIs('admin.allappointment') ? 'active' : '' }}" 
+        id="AllBtn">All</a>
+        
   <a href="{{ route('admin.appointment') }}" 
         class="tab-btn {{ request()->routeIs('admin.appointment') ? 'active' : '' }}" 
         id="UpcomingBtn">Upcoming</a>
@@ -22,10 +26,6 @@
       <a href="{{ route('admin.pastappointment') }}" 
         class="tab-btn {{ request()->routeIs('admin.pastappointment') ? 'active' : '' }}" 
         id="PastBtn">Past</a>
-        
-      <a href="{{ route('admin.allappointment') }}" 
-        class="tab-btn {{ request()->routeIs('admin.allappointment') ? 'active' : '' }}" 
-        id="AllBtn">All</a>
 </div>
 
 <!-- Appointment Table -->

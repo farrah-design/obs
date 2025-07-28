@@ -38,46 +38,15 @@ class FeedbackController extends Controller
     /**
      * Display feedback for a specific appointment
      */
-    public function show($appointmentId)
+    public function show()
     {
-        $feedback = Feedback::where('appointment_id', $appointmentId)
-            ->with('customer')
-            ->firstOrFail();
-
-        return response()->json([
-            'feedback' => $feedback,
-            'stars' => $feedback->stars // Using the accessor from model
-        ]);
-    }
-
-    /**
-     * Get all feedback for the authenticated customer
-     */
-    public function customerFeedback()
-    {
-        $feedback = Feedback::where('customerID', Auth::id())
-            ->with('appointment.services')
-            ->orderBy('date', 'desc')
-            ->paginate(10);
-
-        return response()->json([
+        $feedback = Feedback::with('customer')->get();
+    
+        // Return the view with data
+        return view('admin.feedback', [
             'feedback' => $feedback
         ]);
     }
 
-    /**
-     * Get recent feedback for admin dashboard
-     */
-    public function recent()
-    {
-        $feedback = Feedback::with(['customer', 'appointment'])
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
-
-        return response()->json([
-            'recent_feedback' => $feedback
-        ]);
-    }
 
 }
